@@ -1,0 +1,3 @@
+Communicates with a ClangCompletionServer instance to get code completion
+results.
+--Doug Rosvick

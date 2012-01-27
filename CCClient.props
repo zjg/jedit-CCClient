@@ -1,0 +1,38 @@
+
+# general plugin properites
+plugin.ccclient.CCClientPlugin.name=CCClient
+plugin.ccclient.CCClientPlugin.author=Doug Rosvick
+plugin.ccclient.CCClientPlugin.version=0.1
+plugin.ccclient.CCClientPlugin.docs=index.html
+plugin.ccclient.CCClientPlugin.description=C/C++ code completion using ClangCompletionServer
+
+plugin.ccclient.CCClientPlugin.activate=defer
+plugin.ccclient.CCClientPlugin.usePluginHome=true
+
+# dependencies
+plugin.ccclient.CCClientPlugin.depend.0=jdk 1.6
+plugin.ccclient.CCClientPlugin.depend.1=jedit 05.00.01.00
+plugin.ccclient.CCClientPlugin.depend.2=plugin completion.CompletionPlugin 0.3
+# plugin.CCClient.depend.3=plugin jnaplugin.JNAPlugin 3.2.4
+# plugin.CCClient.depend.7=plugin SuperAbbrevsPlugin 0.32
+# plugin.CCClient.depend.2=plugin errorlist.ErrorListPlugin 1.9
+# plugin.CCClient.depend.4=plugin projectviewer.ProjectPlugin 3.0.1
+
+# option panes
+plugin.ccclient.CCClientPlugin.option-pane=\
+	ccclient_general
+options.ccclient_general.label=CCClient
+options.ccclient_general.code=new ccclient.GeneralOptionsPane();
+
+# actions
+plugin.ccclient.CCClientPlugin.menu=\
+   ccclient.menuitem
+ccclient.menuitem.label=Menu Item
+
+# messages
+# messages.includeDirs=Include Directories
+
+
+# window title
+ccclient.title=CCClient
+
