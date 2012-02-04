@@ -20,11 +20,58 @@
       <pathelement location="${jedit.plugins.dir}/Completion.jar" />
       <pathelement location="${jedit.plugins.dir}/CommonControls.jar" />
       
-      
       <!--
       <pathelement location="${jedit.plugins.dir}/ErrorList.jar" />
       <pathelement location="${jedit.plugins.dir}/SuperAbbrevs.jar" />
       -->
    </path>
+   
+	<target name="build.post">
+		<copy todir="${install.dir}">
+			<fileset dir="${build.lib}">
+				<include name="*.jar" />
+			</fileset>
+		</copy>
+	</target>
+
+	<!-- ensure that thrift .java files get generated before the compile step -->
+	<target name="compile" depends="resolve,thrift-gen">
+	   <antcall target="jEditPlugin.compile" />
+	</target>
 	
+	
+	<!-- thrift Ant code from:
+	      http://www.flester.com/blog/2009/04/26/using-thrift-from-ant
+	-->
+  <property name="thrift.dir" value="${basedir}/ccs-ipc"/>
+  <property name="thrift.out.dir" value="${basedir}/src/gen-java"/>
+  <property name="thrift.package" value="org/zjg/ccs"/>
+
+  <!-- thrift files -->
+  <fileset id="thrift.files" dir="${thrift.dir}">
+    <include name="**/*.thrift"/>
+  </fileset>
+  <!-- Determint if thrift generated java is up to date -->
+  <target name="thrift-init">
+    <dependset>
+      <srcfileset refid="thrift.files"/>
+      <targetfileset dir = "${thrift.out.dir}/${thrift.package}">
+        <include name="**/*.java"/>
+      </targetfileset>
+    </dependset>
+    <available file="${thrift.out.dir}/${thrift.package}/CCS.java"
+               property="thrift.uptodate"/>
+  </target>
+
+  <!-- Generate thrift java -->
+  <target name="thrift-gen" depends="thrift-init" unless="thrift.uptodate">
+    <pathconvert property="thrift.file.list" refid="thrift.files"
+               pathsep=" " dirsep="/">
+    </pathconvert>
+    <echo message="Running thrift generator on ${thrift.file.list}"/>
+    <exec executable="thrift" dir="${basedir}" failonerror="true">
+      <arg line="--strict --gen java -o src ${thrift.file.list}"/>
+    </exec>
+  </target>
+  
 </project>

@@ -21,6 +21,10 @@ import completion.service.CompletionProvider;
 import completion.util.CompletionUtil;
 import completion.util.BaseCompletionCandidate;
 
+import org.zjg.ccs.CodeCompletionRequest;
+import org.zjg.ccs.CodeCompletionResponse;
+import org.zjg.ccs.CCS;
+
 import ccclient.CCClientPlugin;
 
 public class CodeCompletion implements CompletionProvider
@@ -53,46 +57,18 @@ public class CodeCompletion implements CompletionProvider
       column -= CompletionUtil.getCompletionPrefix(view).length();
       
       
+      CodeCompletionRequest request = new CodeCompletionRequest();
+      request.filename = file;
+      request.line = line;
+      request.column = column;
       
-      
-      // todo: get completion results
-      
-      
-      
-      // libclang.CXCompletionResult[] clangResults =
-      //    clangCompletions.Results.toArray(clangCompletions.NumResults);
-      
-      // Map<Integer, List<CompletionCandidate>> prioMap =
-      //    new HashMap<Integer, List<CompletionCandidate>>();
-      
-      // for (libclang.CXCompletionResult result : clangResults)
-      // {
-      //    CXString.ByValue chunkText =
-      //       LibclangLibrary.INSTANCE.clang_getCompletionChunkText(
-      //          result.CompletionString,
-      //          LibclangLibrary.CXCompletionChunkKind.CXCompletionChunk_TypedText);
-         
-      //    if (chunkText != null)
-      //    {
-      //       String desc = LibclangLibrary.INSTANCE.clang_getCString(chunkText);
-      //       // I don't think I need to dispose the chunkText CXString here...
-      //       // ... based on looking through the libclang sources for getCompletionChunkText()
-            
-      //       if (desc != null)
-      //       {
-      //          // add code completion based on its priority
-      //          int prio = LibclangLibrary.INSTANCE.clang_getCompletionPriority(result.CompletionString);
-      //          List<CompletionCandidate> list = prioMap.get(prio);
-      //          if (list == null)
-      //          {
-      //             prioMap.put(prio, list = new ArrayList<CompletionCandidate>());
-      //          }
-      //          list.add(new BaseCompletionCandidate(desc));
-      //       }
-      //    }
+      // try {
+      //    request.writeTo(CCClientPlugin.getSocketOutput());
       // }
-      // // Disposing of the completion results was causing crashes....
-      // // LibclangLibrary.INSTANCE.clang_disposeCodeCompleteResults(clangCompletions);
+      // catch (Exception e) {
+      // }
+      
+      
       
       List<CompletionCandidate> codeCompletions = new ArrayList<CompletionCandidate>();
       
