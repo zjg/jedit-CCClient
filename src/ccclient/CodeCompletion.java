@@ -11,10 +11,14 @@ import java.util.Map;
 import java.util.Set;
 import java.util.Vector;
 
+import org.apache.thrift.TException;
+import org.apache.thrift.transport.TTransportException;
+
 import org.gjt.sp.jedit.Mode;
 import org.gjt.sp.jedit.View;
 import org.gjt.sp.jedit.jEdit;
 import org.gjt.sp.jedit.textarea.TextArea;
+import org.gjt.sp.util.Log;
  
 import completion.service.CompletionCandidate;
 import completion.service.CompletionProvider;
@@ -62,24 +66,26 @@ public class CodeCompletion implements CompletionProvider
       request.line = line;
       request.column = column;
       
-      // try {
-      //    request.writeTo(CCClientPlugin.getSocketOutput());
-      // }
-      // catch (Exception e) {
-      // }
-      
-      
+      CodeCompletionResponse response;
+      try {
+         CCClientPlugin.getCcsClient().ping();
+         response = CCClientPlugin.getCcsClient().codeCompletion(request);
+      }
+      catch (TTransportException e) {
+         Log.log(Log.DEBUG, this, "TTransportException " + e.getType());
+         return null;
+      }
+      catch (TException e) {
+         Log.log(Log.DEBUG, this, "Exception while trying to get completion response:");
+         Log.log(Log.DEBUG, this, e.toString());
+         return null;
+      }
       
       List<CompletionCandidate> codeCompletions = new ArrayList<CompletionCandidate>();
-      
-      // Integer[] prioList = prioMap.keySet().toArray(new Integer[1]);
-      // Arrays.sort(prioList);
-      // // for (int i = prioList.length - 1; i >= 0; --i)
-      // for (int i = 0; i < prioList.length; ++i)
-      // {
-      //    codeCompletions.addAll(prioMap.get(prioList[i]));
-      // }
-      
+      for (String result : response.results)
+      {
+         codeCompletions.add(new BaseCompletionCandidate(result));
+      }
       return codeCompletions;
    }
    
