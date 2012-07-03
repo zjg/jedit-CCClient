@@ -9,7 +9,7 @@ plugin.ccclient.CCClientPlugin.description=C/C++ code completion using ClangComp
 plugin.ccclient.CCClientPlugin.activate=defer
 plugin.ccclient.CCClientPlugin.usePluginHome=true
 plugin.ccclient.CCClientPlugin.files=
-plugin.ccclient.CCClientPlugin.jars=libthrift.jar slf4j-api.jar
+plugin.ccclient.CCClientPlugin.jars=libthrift-0.9.0-dev.jar slf4j-api.jar
 
 # dependencies
 plugin.ccclient.CCClientPlugin.depend.0=jdk 1.6

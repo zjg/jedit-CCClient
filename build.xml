@@ -2,35 +2,40 @@
 <project name="CCClient" default="build" basedir=".">
    <property name="compiler.source" value="1.6" />
    <property name="compiler.target" value="1.6" />
-   
+
    <property file="build.properties"/>
    <property file="../build.properties"/>
    <property file="${user.home}/build.properties"/>
-   
+
    <property name="src.dir" location="${basedir}/src"/>
    <property name="build.support" value="../build-support" />
    <property name="jedit.plugins.dir" value="${install.dir}" />
    <property name="jar.name" value="${ant.project.name}.jar"/>
    <property name="docs-proc.target" value="none"/>
-   
+
    <import file="${build.support}/plugin-build.xml" />
-   
+
    <path id="project.class.path">
       <pathelement location="${jedit.install.dir}/jedit.jar" />
       <pathelement location="${jedit.plugins.dir}/Completion.jar" />
       <pathelement location="${jedit.plugins.dir}/CommonControls.jar" />
-      
+
       <!--
       <pathelement location="${jedit.plugins.dir}/ErrorList.jar" />
       <pathelement location="${jedit.plugins.dir}/SuperAbbrevs.jar" />
       -->
+
+      <pathelement location="${basedir}/lib/libthrift-0.9.0-dev.jar" />
    </path>
-   
+
 	<target name="build.post">
 		<copy todir="${install.dir}">
 			<fileset dir="${build.lib}">
 				<include name="*.jar" />
 			</fileset>
+			<fileset dir="${basedir}/lib">
+			   <include name="*.jar" />
+         </fileset>
 		</copy>
 	</target>
 
@@ -38,8 +43,8 @@
 	<target name="compile" depends="resolve,thrift-gen">
 	   <antcall target="jEditPlugin.compile" />
 	</target>
-	
-	
+
+
 	<!-- thrift Ant code from:
 	      http://www.flester.com/blog/2009/04/26/using-thrift-from-ant
 	-->
@@ -73,5 +78,5 @@
       <arg line="--strict --gen java -o src ${thrift.file.list}"/>
     </exec>
   </target>
-  
+
 </project>

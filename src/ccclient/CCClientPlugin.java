@@ -28,12 +28,12 @@ public class CCClientPlugin extends EditPlugin
 
    private static Client ccsClient_ = null;
    private static TTransport transport_ = null;
-   
+
    @Override
    public void start()
    {
       try {
-         transport_ = new TSocket("archon", 9515);
+         transport_ = new TSocket("localhost", 9515);
          transport_.open();
          TProtocol protocol = new TBinaryProtocol(transport_);
          ccsClient_ = new Client(protocol);
@@ -41,7 +41,7 @@ public class CCClientPlugin extends EditPlugin
       catch (TTransportException e) {
          Log.log(Log.DEBUG, this, "TTransportException " + e.getType());
       }
-      
+
       try {
          ccsClient_.ping();
          ccsClient_.ping();
@@ -66,9 +66,9 @@ public class CCClientPlugin extends EditPlugin
       catch (TException e) {
          Log.log(Log.DEBUG, this, "TException! " + e.toString());
       }
-      
+
       ccsClient_ = null;
-      
+
       transport_.close();
       transport_ = null;
    }
@@ -77,5 +77,5 @@ public class CCClientPlugin extends EditPlugin
    {
       return ccsClient_;
    }
-   
+
 }

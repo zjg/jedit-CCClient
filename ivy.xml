@@ -1,7 +1,9 @@
 <ivy-module version="2.0">
    <info organisation="jedit-plugins" module="CCClient"/>
    <dependencies>
-      <dependency org="org.apache.thrift" name="libthrift" rev="0.8.0"/>
+      <!-- thrift-0.9.0 hasn't been released yet
+      <dependency org="org.apache.thrift" name="libthrift" rev="0.9.0"/>
+      -->
       <dependency org="org.slf4j" name="slf4j-api" rev="1.6.1"/>
    </dependencies>
 </ivy-module>
