@@ -23,10 +23,15 @@ import org.gjt.sp.util.Log;
 import completion.service.CompletionCandidate;
 import completion.service.CompletionProvider;
 import completion.util.CompletionUtil;
+import completion.util.CodeCompletionVariable;
+import completion.util.CodeCompletionType;
 import completion.util.BaseCompletionCandidate;
 
 import org.zjg.ccs.CodeCompletionRequest;
 import org.zjg.ccs.CodeCompletionResponse;
+import org.zjg.ccs.CodeCompletionChunk;
+import org.zjg.ccs.CodeCompletionChunkKind;
+import org.zjg.ccs.CodeCompletionCandidate;
 import org.zjg.ccs.CCS;
 
 import ccclient.CCClientPlugin;
@@ -63,8 +68,9 @@ public class CodeCompletion implements CompletionProvider
       
       CodeCompletionRequest request = new CodeCompletionRequest();
       request.filename = file;
-      request.line = line;
-      request.column = column;
+      // jEdit indexes from 0, but clang expects from 1
+      request.line = line + 1;
+      request.column = column + 1;
       
       CodeCompletionResponse response;
       try {
@@ -82,9 +88,24 @@ public class CodeCompletion implements CompletionProvider
       }
       
       List<CompletionCandidate> codeCompletions = new ArrayList<CompletionCandidate>();
-      for (String result : response.results)
+      for (CodeCompletionCandidate result : response.results)
       {
-         codeCompletions.add(new BaseCompletionCandidate(result));
+         if (result != null)
+         {
+            //Log.log(Log.DEBUG, this, "Result");
+            for (CodeCompletionChunk chunk : result.chunks)
+            {
+               //Log.log(Log.DEBUG, this,
+               //        "Chunk: " + chunk.kind + " '" + chunk.text
+               //        + "' (text set=" + chunk.isSetText() + ")");
+               if (chunk.kind == CodeCompletionChunkKind.TypedText)
+               {
+                  codeCompletions.add(new BaseCompletionCandidate(chunk.text));
+                  //codeCompletions.add(new CodeCompletionVariable(
+                  //   CodeCompletionType.UNKNOWN, chunk.text, "<class>", "<docs>"));
+               }
+            }
+         }
       }
       return codeCompletions;
    }
