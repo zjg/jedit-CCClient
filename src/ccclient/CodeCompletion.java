@@ -74,7 +74,6 @@ public class CodeCompletion implements CompletionProvider
       
       CodeCompletionResponse response;
       try {
-         CCClientPlugin.getCcsClient().ping();
          response = CCClientPlugin.getCcsClient().codeCompletion(request);
       }
       catch (TTransportException e) {
@@ -92,17 +91,17 @@ public class CodeCompletion implements CompletionProvider
       {
          if (result != null)
          {
-            //Log.log(Log.DEBUG, this, "Result");
+            // Log.log(Log.DEBUG, this, "Result");
             for (CodeCompletionChunk chunk : result.chunks)
             {
-               //Log.log(Log.DEBUG, this,
+               // Log.log(Log.DEBUG, this,
                //        "Chunk: " + chunk.kind + " '" + chunk.text
                //        + "' (text set=" + chunk.isSetText() + ")");
                if (chunk.kind == CodeCompletionChunkKind.TypedText)
                {
-                  codeCompletions.add(new BaseCompletionCandidate(chunk.text));
-                  //codeCompletions.add(new CodeCompletionVariable(
-                  //   CodeCompletionType.UNKNOWN, chunk.text, "<class>", "<docs>"));
+                  // codeCompletions.add(new BaseCompletionCandidate(chunk.text));
+                  codeCompletions.add(new CodeCompletionVariable(
+                    CodeCompletionType.UNKNOWN, chunk.text, "<class>", "<docs>"));
                }
             }
          }

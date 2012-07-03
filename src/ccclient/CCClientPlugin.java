@@ -43,8 +43,8 @@ public class CCClientPlugin extends EditPlugin
       }
 
       try {
-         ccsClient_.ping();
-         ccsClient_.ping();
+         String versionInfo = ccsClient_.getVersionInfo();
+         Log.log(Log.MESSAGE, this, "server version: " + versionInfo);
       }
       catch (TTransportException e) {
          Log.log(Log.DEBUG, this, "TTransportException " + e.getType());
@@ -57,16 +57,6 @@ public class CCClientPlugin extends EditPlugin
    @Override
    public void stop()
    {
-      try {
-         ccsClient_.ping();
-      }
-      catch (TTransportException e) {
-         Log.log(Log.DEBUG, this, "TTransportException " + e.getType());
-      }
-      catch (TException e) {
-         Log.log(Log.DEBUG, this, "TException! " + e.toString());
-      }
-
       ccsClient_ = null;
 
       transport_.close();
