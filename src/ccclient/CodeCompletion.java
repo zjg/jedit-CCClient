@@ -91,19 +91,21 @@ public class CodeCompletion implements CompletionProvider
       {
          if (result != null)
          {
-            // Log.log(Log.DEBUG, this, "Result");
+            String typedText = "";
+            
             for (CodeCompletionChunk chunk : result.chunks)
             {
-               // Log.log(Log.DEBUG, this,
-               //        "Chunk: " + chunk.kind + " '" + chunk.text
-               //        + "' (text set=" + chunk.isSetText() + ")");
                if (chunk.kind == CodeCompletionChunkKind.TypedText)
                {
-                  // codeCompletions.add(new BaseCompletionCandidate(chunk.text));
-                  codeCompletions.add(new CodeCompletionVariable(
-                    CodeCompletionType.UNKNOWN, chunk.text, "<class>", "<docs>"));
+                  typedText = chunk.text;
                }
             }
+            
+            // Log.log(Log.DEBUG, this, "result: " + result.toString());
+            
+            // todo - upgrade clang & we can use the new comment parsing to get <docs>
+            codeCompletions.add(new CodeCompletionVariable(
+              CodeCompletionType.UNKNOWN, typedText, result.parentContext, "<docs>"));
          }
       }
       return codeCompletions;
